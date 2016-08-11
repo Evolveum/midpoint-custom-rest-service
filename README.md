@@ -1,29 +1,26 @@
 # midpoint-custom-rest-overlay
-Example of a midPoint overlay project that implements a custom web service.
+Example of a midPoint overlay project that implements a custom REST service.
 
-The web service is implemented in the midpoint-custom-service-server. It is
-implemented by using JAX-WS contract-first development. WSDL file is part of
-the project and the server code is generated from that.
+The service is implemented by ExampleRestService class. Two necessary Spring context
+files are in "resources" directory.
 
-The midpoint-custom-service-overlay is an overlay project that is using
-the web service client and itegrates it with midPoint.
-
-There is also testing web service client in midpoint-custom-service-client.
+This project is an adaptation (with some simplifications) of midpoint-custom-service.
+It requires midPoint 3.4.1 or later (at least v3.5devel-153-g22e81e5).
 
 Building and running:
 
-Just use the simple "mvn clean install" in the top-level project. It will
-build the service, create the overlay and build the client. 
-The final midpoint.war will be built in midpoint-custom-service-overlay/target/midpoint.war
-Deploy that WAR to the Tomcat. The web service will be listening at
-http://localhost:8080/midpoint/ws/example-1
+Run:
 
-The testing client can be excuted by running the following in the midpoint-custom-service-client
-directory:
+   mvn package
 
-mvn exec:java -Dexec.mainClass="com.example.midpoint.service.client.Main"
+The final midpoint.war will be built in target/midpoint.war. Deploy that WAR to the Tomcat.
+The service will be listening at http://localhost:8080/midpoint/ws/rest-example.
 
-The client will search for a user with e-mail address jack@caribbean.com.
+Service can be invoked e.g. by pointing a browser to the following URL:
+
+http://localhost:8080/midpoint/ws/rest-example/users/mail/jack@caribbean.com
+
+It will return user(s) with e-mail address jack@caribbean.com.
 
 See https://wiki.evolveum.com/display/midPoint/Customization+With+Overlay+Project
 for more details about midPoint overlay projects.
