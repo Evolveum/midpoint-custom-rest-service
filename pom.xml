@@ -16,224 +16,349 @@
   -->
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<name>midPoint Custom REST Service Overlay</name>
-	<groupId>com.example</groupId>
-	<artifactId>midpoint-custom-rest-service</artifactId>
-	<version>3.5-SNAPSHOT</version>
-	<packaging>war</packaging>
-	<description>Example of a midPoint overlay project that implements a custom REST service</description>
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<repositories>
-		<repository>
-			<id>evolveum</id>
-			<name>Evolveum Public Releases</name>
-			<url>http://nexus.evolveum.com/nexus/content/groups/public</url>
-		</repository>
-		<repository>
-			<id>evolveum-snapshots</id>
-			<name>Evolveum Snapshots</name>
-			<url>http://nexus.evolveum.com/nexus/content/repositories/snapshots/</url>
-		</repository>
-	</repositories>
-    
-	<properties>
-		<project.source.version>1.7</project.source.version>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <groupId>com.example</groupId>
+    <artifactId>midpoint-custom-rest-service</artifactId>
+    <version>4.1-SNAPSHOT</version>
+    <packaging>war</packaging>
 
-		<midpoint.version>3.5-SNAPSHOT</midpoint.version>
-		<jaxb.version>2.2.10-b140310.1920</jaxb.version>
-		<cxf.version>3.1.6</cxf.version>
-		<testng.version>6.8.8</testng.version>
-	</properties>
+    <name>midPoint Custom REST Service Overlay</name>
+    <description>Example of a midPoint overlay project that implements a custom REST service</description>
 
-		<dependencies>
+    <properties>
+        <java.version>11</java.version>
+        <project.source.version>${java.version}</project.source.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-context</artifactId>
-				<version>4.2.5.RELEASE</version>
-			</dependency>
+        <midpoint.version>4.1-SNAPSHOT</midpoint.version>
+        <spring.boot.version>2.1.8.RELEASE</spring.boot.version>
 
-			<dependency>
-				<groupId>com.evolveum.midpoint.infra</groupId>
-				<artifactId>prism</artifactId>
-				<version>${midpoint.version}</version>
-			</dependency>
+        <jaxb.version>2.3.0.1</jaxb.version>
+        <cxf.version>3.3.1</cxf.version>
+        <testng.version>6.8.8</testng.version>
+    </properties>
 
-			<dependency>
-				<groupId>com.evolveum.midpoint.model</groupId>
-				<artifactId>model-api</artifactId>
-				<version>${midpoint.version}</version>
-			</dependency>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <!-- Import dependency management from MidPoint -->
+                <groupId>com.evolveum.midpoint</groupId>
+                <artifactId>midpoint</artifactId>
+                <version>${midpoint.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <!-- Import dependency management from Spring Boot -->
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring.boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
-			<!-- quite a hack, for now (to access SecurityHelper and RestServiceUtil -->
-			<dependency>
-				<groupId>com.evolveum.midpoint.model</groupId>
-				<artifactId>model-impl</artifactId>
-				<version>${midpoint.version}</version>
-			</dependency>
+    <dependencies>
+        <dependency>
+            <groupId>com.evolveum.midpoint.infra</groupId>
+            <artifactId>prism-impl</artifactId>
+            <version>${midpoint.version}</version>
+        </dependency>
 
-			<dependency>
-				<groupId>com.evolveum.midpoint.model</groupId>
-				<artifactId>model-common</artifactId>
-				<version>${midpoint.version}</version>
-			</dependency>
+        <dependency>
+            <groupId>com.evolveum.midpoint.model</groupId>
+            <artifactId>model-api</artifactId>
+            <version>${midpoint.version}</version>
+        </dependency>
 
-			<dependency>
-				<groupId>com.evolveum.midpoint.tools</groupId>
-				<artifactId>test-ng</artifactId>
-				<version>${midpoint.version}</version>
-			</dependency>
+        <!-- quite a hack, for now (to access SecurityHelper and RestServiceUtil -->
+        <dependency>
+            <groupId>com.evolveum.midpoint.model</groupId>
+            <artifactId>model-impl</artifactId>
+            <version>${midpoint.version}</version>
+        </dependency>
 
-			<dependency>
-				<groupId>com.evolveum.midpoint.infra</groupId>
-				<artifactId>ws-util</artifactId>
-				<version>${midpoint.version}</version>
-			</dependency>
+        <dependency>
+            <groupId>com.evolveum.midpoint.model</groupId>
+            <artifactId>model-common</artifactId>
+            <version>${midpoint.version}</version>
+        </dependency>
 
+        <dependency>
+            <groupId>com.evolveum.midpoint.tools</groupId>
+            <artifactId>test-ng</artifactId>
+            <version>${midpoint.version}</version>
+        </dependency>
 
-			<dependency>
-				<groupId>commons-lang</groupId>
-				<artifactId>commons-lang</artifactId>
-				<version>2.6</version>
-			</dependency>
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.6</version>
+        </dependency>
 
-			<dependency>
-				<groupId>commons-collections</groupId>
-				<artifactId>commons-collections</artifactId>
-				<version>3.2.2</version>
-			</dependency>
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+            <version>3.2.2</version>
+        </dependency>
 
-			<dependency>
-				<groupId>com.sun.xml.bind</groupId>
-				<artifactId>jaxb-impl</artifactId>
-				<version>${jaxb.version}</version>
-			</dependency>
+        <dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-impl</artifactId>
+            <version>${jaxb.version}</version>
+        </dependency>
 
-			<dependency>
-				<groupId>com.sun.xml.bind</groupId>
-				<artifactId>jaxb-core</artifactId>
-				<version>${jaxb.version}</version>
-			</dependency>
+        <dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-core</artifactId>
+            <version>${jaxb.version}</version>
+        </dependency>
 
-			<dependency>
-				<groupId>org.apache.cxf</groupId>
-				<artifactId>cxf-core</artifactId>
-				<version>${cxf.version}</version>
-			</dependency>
-			
-			<dependency>
-				<groupId>org.apache.cxf</groupId>
-				<artifactId>cxf-rt-frontend-simple</artifactId>
-				<version>${cxf.version}</version>
-			</dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-core</artifactId>
+            <version>${cxf.version}</version>
+        </dependency>
 
-			<dependency>
-				<groupId>org.apache.cxf</groupId>
-				<artifactId>cxf-rt-frontend-jaxws</artifactId>
-				<version>${cxf.version}</version>
-			</dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-frontend-simple</artifactId>
+            <version>${cxf.version}</version>
+        </dependency>
 
-			<dependency>
-				<groupId>org.apache.cxf</groupId>
-				<artifactId>cxf-rt-transports-http</artifactId>
-				<version>${cxf.version}</version>
-			</dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-frontend-jaxws</artifactId>
+            <version>${cxf.version}</version>
+        </dependency>
 
-			<dependency>
-				<groupId>org.apache.cxf</groupId>
-				<artifactId>cxf-rt-ws-security</artifactId>
-				<version>${cxf.version}</version>
-				<exclusions>
-					<exclusion> <!-- Version in dependency of org.apache.neethi:neethi conflicts with cxf-core -->
-						<groupId>org.codehaus.woodstox</groupId>
-						<artifactId>woodstox-core-asl</artifactId>
-					</exclusion>
-					<exclusion> <!-- Version in dependency of org.opensaml:opensaml conflicts with activiti-engine -->
-						<groupId>joda-time</groupId>
-						<artifactId>joda-time</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-transports-http</artifactId>
+            <version>${cxf.version}</version>
+        </dependency>
 
-
-			<dependency>
-				<groupId>org.testng</groupId>
-				<artifactId>testng</artifactId>
-				<version>${testng.version}</version>
-			</dependency>
-            
-		<dependency>
-			<groupId>com.evolveum.midpoint.gui</groupId>
-			<artifactId>admin-gui</artifactId>
-			<version>3.5-SNAPSHOT</version>
-			<type>war</type>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.evolveum.midpoint.gui</groupId>
-			<artifactId>admin-gui</artifactId>
-			<version>3.5-SNAPSHOT</version>
-			<type>jar</type>
-			<classifier>classes</classifier>
-			<scope>compile</scope>
-		</dependency>
-
-			<dependency>
-				<groupId>org.apache.cxf</groupId>
-				<artifactId>cxf-rt-frontend-jaxrs</artifactId>
-				<version>3.1.6</version>
-			</dependency>
-
-			<dependency>
-				<groupId>javax.ws.rs</groupId>
-				<artifactId>javax.ws.rs-api</artifactId>
-				<version>2.0</version>
-			</dependency>
-		</dependencies>
-
-	<build>
-		<finalName>midpoint</finalName>
-		<resources>
-			<resource>
-				<filtering>false</filtering>
-				<directory>src/main/resources</directory>
-			</resource>
-			<resource> <!-- We need this to include html files from source tree -->
-				<filtering>false</filtering>
-				<directory>src/main/java</directory>
-				<excludes>
-					<exclude>**/*.java</exclude>
-				</excludes>
-			</resource>
-		</resources>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.3.2</version>
-				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-war-plugin</artifactId>
-				<version>2.1.1</version>
-				<configuration>
-					<overlays>
-						<overlay>
-							<groupId>com.evolveum.midpoint.gui</groupId>
-							<artifactId>admin-gui</artifactId>
-						</overlay>
-					</overlays>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-ws-security</artifactId>
+            <version>${cxf.version}</version>
+            <exclusions>
+                <exclusion> <!-- Version in dependency of org.apache.neethi:neethi conflicts with cxf-core -->
+                    <groupId>org.codehaus.woodstox</groupId>
+                    <artifactId>woodstox-core-asl</artifactId>
+                </exclusion>
+                <exclusion> <!-- Version in dependency of org.opensaml:opensaml conflicts with activiti-engine -->
+                    <groupId>joda-time</groupId>
+                    <artifactId>joda-time</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 
 
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>${testng.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.evolveum.midpoint.gui</groupId>
+            <artifactId>admin-gui</artifactId>
+            <version>${midpoint.version}</version>
+            <type>war</type>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.evolveum.midpoint.gui</groupId>
+            <artifactId>admin-gui</artifactId>
+            <version>${midpoint.version}</version>
+            <type>jar</type>
+            <classifier>classes</classifier>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-frontend-jaxrs</artifactId>
+            <version>3.1.6</version>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.ws.rs</groupId>
+            <artifactId>javax.ws.rs-api</artifactId>
+            <version>2.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-annotations-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <repositories>
+        <repository>
+            <id>evolveum</id>
+            <name>Evolveum Public Releases</name>
+            <url>http://nexus.evolveum.com/nexus/content/groups/public</url>
+        </repository>
+        <repository>
+            <id>evolveum-snapshots</id>
+            <name>Evolveum Snapshots</name>
+            <url>http://nexus.evolveum.com/nexus/content/repositories/snapshots/</url>
+        </repository>
+    </repositories>
+
+    <build>
+        <finalName>midpoint</finalName>
+        <resources>
+            <resource>
+                <filtering>false</filtering>
+                <directory>src/main/resources</directory>
+                <excludes>
+                    <exclude>**/org.identityconnectors.common.logging</exclude>
+                </excludes>
+            </resource>
+            <!-- LOCALIZATION -->
+            <resource>
+                <filtering>true</filtering>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>localization/Midpoint*.properties</include>
+                    <include>banner.txt</include>
+                </includes>
+            </resource>
+            <!--  ICF LOGGING CONFIGURATION -->
+            <resource>
+                <targetPath>../midpoint/META-INF/services</targetPath>
+                <filtering>false</filtering>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/org.identityconnectors.common.logging</include>
+                </includes>
+            </resource>
+            <resource> <!-- We need this to include html files from source tree -->
+                <filtering>false</filtering>
+                <directory>src/main/java</directory>
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                    <exclude>**/*.properties</exclude>
+                </excludes>
+            </resource>
+            <resource>
+                <filtering>true</filtering>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.properties</include>
+                </includes>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.0</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.2.2</version>
+                <configuration>
+                    <overlays>
+                        <overlay>
+                            <groupId>com.evolveum.midpoint.gui</groupId>
+                            <artifactId>admin-gui</artifactId>
+                        </overlay>
+                    </overlays>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                    <packagingExcludes>
+                        WEB-INF/lib/admin-gui-*-classes.jar,WEB-INF/lib/javax.annotation-api-*.jar
+                    </packagingExcludes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring.boot.version}</version>
+                <configuration>
+                    <fork>true</fork>
+                    <skip>false</skip>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                        <configuration>
+                            <layoutFactory
+                                    implementation="com.evolveum.midpoint.tools.layout.MidPointWarLayoutFactory"/>
+                            <excludes>
+                                <exclude>
+                                    <groupId>com.evolveum.midpoint.gui</groupId>
+                                    <artifactId>admin-gui</artifactId>
+                                </exclude>
+                                <exclude>
+                                    <groupId>javax.annotation</groupId>
+                                    <artifactId>javax.annotation-api</artifactId>
+                                </exclude>
+                            </excludes>
+                        </configuration>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.evolveum.midpoint</groupId>
+                        <artifactId>midpoint-war-layout</artifactId>
+                        <version>${midpoint.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <!--
+            To run MidPointSpringApplication directly in IDE.
+            Use this if you see: java.lang.NoClassDefFoundError: javax/servlet/Filter
+            -->
+            <id>ide</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-tomcat</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.tomcat.embed</groupId>
+                    <artifactId>tomcat-embed-core</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.tomcat</groupId>
+                    <artifactId>tomcat-annotations-api</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>mysql</groupId>
+                    <artifactId>mysql-connector-java</artifactId>
+                    <scope>runtime</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+    </profiles>
 </project>
