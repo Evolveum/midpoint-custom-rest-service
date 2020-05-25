@@ -20,25 +20,18 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 
-import org.apache.cxf.jaxrs.ext.MessageContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.evolveum.midpoint.model.api.ModelService;
-import com.evolveum.midpoint.model.common.SystemObjectCache;
-import com.evolveum.midpoint.model.impl.security.SecurityHelper;
-import com.evolveum.midpoint.model.impl.util.RestServiceUtil;
 import com.evolveum.midpoint.prism.PrismContext;
 import com.evolveum.midpoint.prism.PrismObject;
 import com.evolveum.midpoint.prism.impl.query.builder.QueryBuilder;
 import com.evolveum.midpoint.prism.query.ObjectQuery;
 import com.evolveum.midpoint.schema.result.OperationResult;
-import com.evolveum.midpoint.schema.util.SystemConfigurationTypeUtil;
 import com.evolveum.midpoint.task.api.Task;
-import com.evolveum.midpoint.task.api.TaskManager;
 import com.evolveum.midpoint.util.exception.*;
 import com.evolveum.midpoint.util.logging.Trace;
 import com.evolveum.midpoint.util.logging.TraceManager;
@@ -47,25 +40,19 @@ import com.evolveum.midpoint.xml.ns._public.common.common_3.UserType;
 
 @Service
 @Produces({ "application/xml", "application/json", "application/yaml" })
-public class ExampleRestService {
+public class ExampleRestService extends AbstractRestService {
 
     private static final Trace LOGGER = TraceManager.getTrace(ExampleRestService.class);
 
-    private static final String OPERATION_SEARCH_USER_BY_EMAIL =
-            ExampleRestService.class.getName() + ".searchUserByEmail";
-
     @Autowired private ModelService modelService;
-    @Autowired private SecurityHelper securityHelper;
     @Autowired private PrismContext prismContext;
-    @Autowired private TaskManager taskManager;
-    @Autowired private SystemObjectCache systemObjectCache;
 
     @GET
     @Path("/users/mail/{email}")
-    public Response searchUserByEmail(@PathParam("email") String email, @Context MessageContext mc) {
+    public Response searchUserByEmail(@PathParam("email") String email) {
         LOGGER.info("searchUserByEmail called with email = {}", email);
-        Task task = initRequest(mc);
-        OperationResult result = task.getResult().createSubresult(OPERATION_SEARCH_USER_BY_EMAIL);
+        Task task = initRequest();
+        OperationResult result = createSubresult(task, "searchUserByEmail");
 
         Response response;
         try {
@@ -76,11 +63,11 @@ public class ExampleRestService {
             }
             response = Response.ok().entity(listType).build();
         } catch (CommonException | RuntimeException e) {
-            response = RestServiceUtil.handleException(null, e);
+            response = handleException(null, e);
         }
 
         result.computeStatus();
-        RestServiceUtil.finishRequest(task, securityHelper);
+        finishRequest(task);
         return response;
     }
 
@@ -92,25 +79,5 @@ public class ExampleRestService {
                 .item(UserType.F_EMAIL_ADDRESS).startsWith(email).matchingCaseIgnore()
                 .build();
         return modelService.searchObjects(UserType.class, query, null, task, result);
-    }
-
-    // in 4.1 we still use "flexible authentication" behind "experimental" toggle, sorry
-    private Task initRequest(MessageContext mc) {
-        if (isExperimentalEnabled()) {
-            return RestServiceUtil.initRequest(taskManager);
-        } else {
-            return RestServiceUtil.initRequest(mc);
-        }
-    }
-
-    private boolean isExperimentalEnabled() {
-        boolean isExperimentalEnabled = false;
-        try {
-            isExperimentalEnabled = SystemConfigurationTypeUtil.isExperimentalCodeEnabled(
-                    systemObjectCache.getSystemConfiguration(new OperationResult("Load System Config")).asObjectable());
-        } catch (SchemaException e) {
-            LOGGER.error("Couldn't load system configuration", e);
-        }
-        return isExperimentalEnabled;
     }
 }

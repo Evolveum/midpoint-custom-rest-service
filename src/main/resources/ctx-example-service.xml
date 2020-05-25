@@ -42,10 +42,9 @@
             <ref bean="exampleRestServiceClass"/>
         </jaxrs:serviceBeans>
         <jaxrs:providers>
-            <ref bean="jaxbProvider" />
-            <ref bean="jsonProvider" />
-            <ref bean="yamlProvider" />
-            <ref bean="restAuthenticationHandler" />
+            <ref bean="jaxbProvider"/>
+            <ref bean="jsonProvider"/>
+            <ref bean="yamlProvider"/>
         </jaxrs:providers>
     </jaxrs:server>
 

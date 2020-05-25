@@ -21,7 +21,7 @@
 
     <groupId>com.example</groupId>
     <artifactId>midpoint-custom-rest-service</artifactId>
-    <version>4.1</version>
+    <version>4.2-SNAPSHOT</version>
     <packaging>war</packaging>
 
     <name>midPoint Custom REST Service Overlay</name>
@@ -32,12 +32,11 @@
         <project.source.version>${java.version}</project.source.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <midpoint.version>4.1</midpoint.version>
+        <midpoint.version>4.2-SNAPSHOT</midpoint.version>
         <spring.boot.version>2.1.8.RELEASE</spring.boot.version>
 
         <jaxb.version>2.3.0.1</jaxb.version>
         <cxf.version>3.3.1</cxf.version>
-        <testng.version>6.8.8</testng.version>
     </properties>
 
     <dependencyManagement>
@@ -185,6 +184,10 @@
             <version>2.0</version>
         </dependency>
 
+        <!--
+        Necessary, otherwise some JARs are missing in lib-provided.
+        Unclear why this is not brought by admin-gui:jar.
+        -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-tomcat</artifactId>
@@ -193,11 +196,6 @@
         <dependency>
             <groupId>org.apache.tomcat</groupId>
             <artifactId>tomcat-annotations-api</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>servlet-api</artifactId>
             <scope>provided</scope>
         </dependency>
     </dependencies>
