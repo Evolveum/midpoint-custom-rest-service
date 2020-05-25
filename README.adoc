@@ -23,7 +23,8 @@ The service is implemented by `ExampleRestService` class.
 Two necessary Spring context files are in `resources` directory.
 
 This project is an adaptation (with some simplifications) of https://github.com/Evolveum/midpoint-overlay-example[midpoint-custom-service].
-It is based on midPoint 4.1.
+It is based on midPoint 4.2 (in development), see
+https://github.com/Evolveum/midpoint-custom-rest-service/tree/v4.1[tag v4.1] for last stable version.
 
 See also README from the https://github.com/Evolveum/midpoint-overlay-example[basic overlay example],
 including also https://github.com/Evolveum/midpoint-overlay-example/blob/master/doc/overlay-development.adoc[midPoint Overlay development] notes.
@@ -63,3 +64,21 @@ curl -v --user "administrator:5ecr3t" \
 http -jv http://localhost:8080/midpoint/ws/rest-example/users/mail/x \
   -a administrator:5ecr3t
 ----
+
+== Technical notes
+
+[NOTE]
+Subject to change during 4.2 development.
+
+Previous to 4.2, CXF servlet was configured directly in midPoint `/ws/*` mapping.
+With 4.2 this is no longer true and `/ws/*` is used for REST service (just as `/rest` and `/api`).
+See https://wiki.evolveum.com/display/midPoint/REST+API[REST API] on our wiki for more.
+
+This overlay sets up CXF servlet on `/ws/*` which disables REST for this mapping (still available
+on alternative mappings) and then configures `rest-example` service under `/ws`.
+This setup uses already provided (hard-coded) configuration for flexible authentication
+that treats the path as "REST" channel and allows usage of basic authentication.
+
+// TODO implement ideas below
+This may change in the future to avoid conflict with built-in REST setup,
+but will require additional flexi-auth configuration.
