@@ -1,40 +1,65 @@
-= midpoint-custom-rest-overlay
+ifdef::env-github[]
+:tip-caption: :bulb:
+:note-caption: :information_source:
+:important-caption: :heavy_exclamation_mark:
+:caution-caption: :fire:
+:warning-caption: :warning:
+endif::[]
+:toc:
+:toc-placement!:
+
+= midPoint custom REST-like overlay
+
+toc::[]
+
+[NOTE]
+Term "REST" is used as usual in the industry but not in the strict REST meaning.
+Sorry about that.
 
 Example of a midPoint overlay project that implements a custom REST service.
+The current version is based on CXF and JAX-RS, not Spring MVC.
 
-The service is implemented by ExampleRestService class.
-Two necessary Spring context files are in "resources" directory.
+The service is implemented by `ExampleRestService` class.
+Two necessary Spring context files are in `resources` directory.
 
 This project is an adaptation (with some simplifications) of https://github.com/Evolveum/midpoint-overlay-example[midpoint-custom-service].
 It is based on midPoint 4.1.
 
+See also README from the https://github.com/Evolveum/midpoint-overlay-example[basic overlay example],
+including also https://github.com/Evolveum/midpoint-overlay-example/blob/master/doc/overlay-development.adoc[midPoint Overlay development] notes.
+Check also https://wiki.evolveum.com/display/midPoint/Customization+With+Overlay+Project[related wiki page].
+
 == Building and running
 
-To build the example run:
+Use JDK 11 for building and running this overlay.
+To build the example run `mvn clean package`.
+The final `midpoint.war` will be built in `target`.
+It can be run directly as executable JAR:
 ----
-mvn package
+java -jar target/midpoint.war
 ----
 
-The final `midpoint.war` will be built in `target`.
+Alternatively you may deploy the WAR to the Tomcat, but this option is no longer supported.
+The web service will be listening at: http://localhost:8080/midpoint/ws/example-1
 
 Deploy that WAR to the Tomcat.
-The service will be listening at http://localhost:8080/midpoint/ws/rest-example.
+The REST service is set up under http://localhost:8080/midpoint/ws/rest-example.
+
+== Testing
 
 To return user(s) with e-mail address `jack@caribbean.com` try:
 
-* pointing a browser to the URL: http://localhost:8080/midpoint/ws/rest-example/users/mail/jack@caribbean.com
-* running cURL command (by default returns XML):
+* Pointing a browser to the URL: http://localhost:8080/midpoint/ws/rest-example/users/mail/jack@caribbean.com
+and entering `administrator` name and password.
+* Running cURL command (by default returns XML):
 +
 ----
 curl -v --user "administrator:5ecr3t" \
   http://localhost:8080/midpoint/ws/rest-example/users/mail/jack@caribbean.com
 ----
-* or HTTPie command (this requests JSON and as of this writing it fails writing the response):
+* or HTTPie command (returns JSON because of `-j` flag):
 +
 ----
 http -jv http://localhost:8080/midpoint/ws/rest-example/users/mail/x \
   -a administrator:5ecr3t
 ----
-
-See https://wiki.evolveum.com/display/midPoint/Customization+With+Overlay+Project
-for more details about midPoint overlay projects.
