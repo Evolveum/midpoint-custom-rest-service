@@ -21,7 +21,7 @@
 
     <groupId>com.example</groupId>
     <artifactId>midpoint-custom-rest-service</artifactId>
-    <version>4.1-SNAPSHOT</version>
+    <version>4.1</version>
     <packaging>war</packaging>
 
     <name>midPoint Custom REST Service Overlay</name>
@@ -32,7 +32,7 @@
         <project.source.version>${java.version}</project.source.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <midpoint.version>4.1-SNAPSHOT</midpoint.version>
+        <midpoint.version>4.1</midpoint.version>
         <spring.boot.version>2.1.8.RELEASE</spring.boot.version>
 
         <jaxb.version>2.3.0.1</jaxb.version>
@@ -157,13 +157,6 @@
             </exclusions>
         </dependency>
 
-
-        <dependency>
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
-            <version>${testng.version}</version>
-        </dependency>
-
         <dependency>
             <groupId>com.evolveum.midpoint.gui</groupId>
             <artifactId>admin-gui</artifactId>
@@ -183,7 +176,7 @@
         <dependency>
             <groupId>org.apache.cxf</groupId>
             <artifactId>cxf-rt-frontend-jaxrs</artifactId>
-            <version>3.1.6</version>
+            <version>${cxf.version}</version>
         </dependency>
 
         <dependency>
@@ -221,9 +214,22 @@
             <url>http://nexus.evolveum.com/nexus/content/repositories/snapshots/</url>
         </repository>
     </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>evolveum</id>
+            <name>Evolveum Public Releases</name>
+            <url>http://nexus.evolveum.com/nexus/content/groups/public</url>
+        </pluginRepository>
+        <pluginRepository>
+            <id>evolveum-snapshots</id>
+            <name>Evolveum Snapshots</name>
+            <url>http://nexus.evolveum.com/nexus/content/repositories/snapshots/</url>
+        </pluginRepository>
+    </pluginRepositories>
 
     <build>
         <finalName>midpoint</finalName>
+
         <resources>
             <resource>
                 <filtering>false</filtering>
@@ -266,6 +272,7 @@
                 </includes>
             </resource>
         </resources>
+
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -324,7 +331,7 @@
                 </executions>
                 <dependencies>
                     <dependency>
-                        <groupId>com.evolveum.midpoint</groupId>
+                        <groupId>com.evolveum.midpoint.tools</groupId>
                         <artifactId>midpoint-war-layout</artifactId>
                         <version>${midpoint.version}</version>
                     </dependency>
@@ -332,33 +339,4 @@
             </plugin>
         </plugins>
     </build>
-
-    <profiles>
-        <profile>
-            <!--
-            To run MidPointSpringApplication directly in IDE.
-            Use this if you see: java.lang.NoClassDefFoundError: javax/servlet/Filter
-            -->
-            <id>ide</id>
-            <dependencies>
-                <dependency>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-tomcat</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>org.apache.tomcat.embed</groupId>
-                    <artifactId>tomcat-embed-core</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>org.apache.tomcat</groupId>
-                    <artifactId>tomcat-annotations-api</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>mysql</groupId>
-                    <artifactId>mysql-connector-java</artifactId>
-                    <scope>runtime</scope>
-                </dependency>
-            </dependencies>
-        </profile>
-    </profiles>
 </project>
