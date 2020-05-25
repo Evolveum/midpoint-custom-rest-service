@@ -45,12 +45,8 @@ import com.evolveum.midpoint.util.logging.TraceManager;
 import com.evolveum.midpoint.xml.ns._public.common.api_types_3.ObjectListType;
 import com.evolveum.midpoint.xml.ns._public.common.common_3.UserType;
 
-/**
- * @author semancik
- * @author katkav
- */
 @Service
-@Produces({ "application/xml", "application/json" })
+@Produces({ "application/xml", "application/json", "application/yaml" })
 public class ExampleRestService {
 
     private static final Trace LOGGER = TraceManager.getTrace(ExampleRestService.class);
