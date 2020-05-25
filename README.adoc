@@ -70,11 +70,11 @@ http -jv http://localhost:8080/midpoint/ws/rest-example/users/mail/x \
 [NOTE]
 Subject to change during 4.2 development.
 
-Previous to 4.2, CXF servlet was configured directly in midPoint `/ws/*` mapping.
-With 4.2 this is no longer true and `/ws/*` is used for REST service (just as `/rest` and `/api`).
+Previous to 4.2, CXF servlet was configured directly in midPoint `+/ws/*+` mapping.
+With 4.2 this is no longer true and `+/ws/*+` is used for REST service (just as `/rest` and `/api`).
 See https://wiki.evolveum.com/display/midPoint/REST+API[REST API] on our wiki for more.
 
-This overlay sets up CXF servlet on `/ws/*` which disables REST for this mapping (still available
+This overlay sets up CXF servlet on `+/ws/*+` which disables REST for this mapping (still available
 on alternative mappings) and then configures `rest-example` service under `/ws`.
 This setup uses already provided (hard-coded) configuration for flexible authentication
 that treats the path as "REST" channel and allows usage of basic authentication.
