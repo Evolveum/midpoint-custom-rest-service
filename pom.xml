@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!--
-  ~ Copyright (c) 2014-2016 Evolveum
+  ~ Copyright (C) 2014-2020 Evolveum
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -19,6 +19,8 @@
         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <!-- It is better not tu use midpoint-parent, as it implies too much and complicates things. -->
+
     <groupId>com.example</groupId>
     <artifactId>midpoint-custom-rest-service</artifactId>
     <version>4.2-SNAPSHOT</version>
@@ -33,7 +35,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <midpoint.version>4.2-SNAPSHOT</midpoint.version>
-        <spring.boot.version>2.1.8.RELEASE</spring.boot.version>
+        <spring.boot.version>2.3.3.RELEASE</spring.boot.version>
 
         <jaxb.version>2.3.0.1</jaxb.version>
         <cxf.version>3.3.1</cxf.version>
@@ -61,101 +63,7 @@
     </dependencyManagement>
 
     <dependencies>
-        <dependency>
-            <groupId>com.evolveum.midpoint.infra</groupId>
-            <artifactId>prism-impl</artifactId>
-            <version>${midpoint.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.evolveum.midpoint.model</groupId>
-            <artifactId>model-api</artifactId>
-            <version>${midpoint.version}</version>
-        </dependency>
-
-        <!-- quite a hack, for now (to access SecurityHelper and RestServiceUtil -->
-        <dependency>
-            <groupId>com.evolveum.midpoint.model</groupId>
-            <artifactId>model-impl</artifactId>
-            <version>${midpoint.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.evolveum.midpoint.model</groupId>
-            <artifactId>model-common</artifactId>
-            <version>${midpoint.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.evolveum.midpoint.tools</groupId>
-            <artifactId>test-ng</artifactId>
-            <version>${midpoint.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>commons-lang</groupId>
-            <artifactId>commons-lang</artifactId>
-            <version>2.6</version>
-        </dependency>
-
-        <dependency>
-            <groupId>commons-collections</groupId>
-            <artifactId>commons-collections</artifactId>
-            <version>3.2.2</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.sun.xml.bind</groupId>
-            <artifactId>jaxb-impl</artifactId>
-            <version>${jaxb.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.sun.xml.bind</groupId>
-            <artifactId>jaxb-core</artifactId>
-            <version>${jaxb.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.cxf</groupId>
-            <artifactId>cxf-core</artifactId>
-            <version>${cxf.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.cxf</groupId>
-            <artifactId>cxf-rt-frontend-simple</artifactId>
-            <version>${cxf.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.cxf</groupId>
-            <artifactId>cxf-rt-frontend-jaxws</artifactId>
-            <version>${cxf.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.cxf</groupId>
-            <artifactId>cxf-rt-transports-http</artifactId>
-            <version>${cxf.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.cxf</groupId>
-            <artifactId>cxf-rt-ws-security</artifactId>
-            <version>${cxf.version}</version>
-            <exclusions>
-                <exclusion> <!-- Version in dependency of org.apache.neethi:neethi conflicts with cxf-core -->
-                    <groupId>org.codehaus.woodstox</groupId>
-                    <artifactId>woodstox-core-asl</artifactId>
-                </exclusion>
-                <exclusion> <!-- Version in dependency of org.opensaml:opensaml conflicts with activiti-engine -->
-                    <groupId>joda-time</groupId>
-                    <artifactId>joda-time</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
+        <!-- This dependency is basis for WAR overlay (it is plain WAR, not "bootified" yet). -->
         <dependency>
             <groupId>com.evolveum.midpoint.gui</groupId>
             <artifactId>admin-gui</artifactId>
@@ -163,6 +71,7 @@
             <type>war</type>
             <scope>runtime</scope>
         </dependency>
+        <!-- This brings the right dependencies with proper excludes from gui-admin. -->
         <dependency>
             <groupId>com.evolveum.midpoint.gui</groupId>
             <artifactId>admin-gui</artifactId>
@@ -172,21 +81,8 @@
             <scope>compile</scope>
         </dependency>
 
-        <dependency>
-            <groupId>org.apache.cxf</groupId>
-            <artifactId>cxf-rt-frontend-jaxrs</artifactId>
-            <version>${cxf.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>javax.ws.rs</groupId>
-            <artifactId>javax.ws.rs-api</artifactId>
-            <version>2.0</version>
-        </dependency>
-
         <!--
         Necessary, otherwise some JARs are missing in lib-provided.
-        Unclear why this is not brought by admin-gui:jar.
         -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -327,13 +223,6 @@
                         </configuration>
                     </execution>
                 </executions>
-                <dependencies>
-                    <dependency>
-                        <groupId>com.evolveum.midpoint.tools</groupId>
-                        <artifactId>midpoint-war-layout</artifactId>
-                        <version>${midpoint.version}</version>
-                    </dependency>
-                </dependencies>
             </plugin>
         </plugins>
     </build>
