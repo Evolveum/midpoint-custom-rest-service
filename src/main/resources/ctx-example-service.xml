@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-  ~ Copyright (c) 2014-2016 Evolveum
+  ~ Copyright (C) 2014-2020 Evolveum
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -41,6 +41,10 @@
         <jaxrs:serviceBeans>
             <ref bean="exampleRestServiceClass"/>
         </jaxrs:serviceBeans>
+        <!--
+        Providers come still from midPoint, but in later versions they will be moved away.
+        They will have to be moved to overlay in future versions, but let's not worry now.
+        -->
         <jaxrs:providers>
             <ref bean="jaxbProvider"/>
             <ref bean="jsonProvider"/>
