@@ -41,27 +41,27 @@ java -jar target/midpoint.war
 ----
 
 Alternatively you may deploy the WAR to the Tomcat, but this option is no longer supported.
-The web service will be listening at: http://localhost:8080/midpoint/ws/example-1
+The web service will be listening at: http://localhost:8080/midpoint/ws/my-ext/rest-example
 
 Deploy that WAR to the Tomcat.
-The REST service is set up under http://localhost:8080/midpoint/ws/rest-example.
+The REST service is set up under http://localhost:8080/midpoint/ws/my-ext/rest-example.
 
 == Testing
 
 To return user(s) with e-mail address `jack@caribbean.com` try:
 
-* Pointing a browser to the URL: http://localhost:8080/midpoint/ws/rest-example/users/mail/jack@caribbean.com
+* Pointing a browser to the URL: http://localhost:8080/midpoint/ws/my-ext/rest-example/users/mail/jack@caribbean.com
 and entering `administrator` name and password.
 * Running cURL command (by default returns XML):
 +
 ----
 curl -v --user "administrator:5ecr3t" \
-  http://localhost:8080/midpoint/ws/rest-example/users/mail/jack@caribbean.com
+  http://localhost:8080/midpoint/ws/my-ext/rest-example/users/mail/jack@caribbean.com
 ----
 * or HTTPie command (returns JSON because of `-j` flag):
 +
 ----
-http -jv http://localhost:8080/midpoint/ws/rest-example/users/mail/x \
+http -jv http://localhost:8080/midpoint/ws/my-ext/rest-example/users/mail/jack@caribbean.com \
   -a administrator:5ecr3t
 ----
 
@@ -74,11 +74,26 @@ Previous to 4.2, CXF servlet was configured directly in midPoint `+/ws/*+` mappi
 With 4.2 this is no longer true and `+/ws/*+` is used for REST service (just as `/rest` and `/api`).
 See https://wiki.evolveum.com/display/midPoint/REST+API[REST API] on our wiki for more.
 
-This overlay sets up CXF servlet on `+/ws/*+` which disables REST for this mapping (still available
-on alternative mappings) and then configures `rest-example` service under `/ws`.
-This setup uses already provided (hard-coded) configuration for flexible authentication
-that treats the path as "REST" channel and allows usage of basic authentication.
+This overlay sets up CXF servlet on `+/ws/my-ext/*+`.
+If colliding mapping path was chosen (like `+/ws/*+`) CXF would completely take over this sub-context.
+This would break some midPoint internals like node management that uses `/ws` mapping.
 
-// TODO implement ideas below
-This may change in the future to avoid conflict with built-in REST setup,
-but will require additional flexi-auth configuration.
+We could map the servlet to `+/my-ws/*+` to avoid any collisions as well, but this would be considered
+https://wiki.evolveum.com/display/midPoint/Flexible+Authentication+Configuration#FlexibleAuthenticationConfiguration-Authenticationchannel[default GUI channel].
+As such, it would not work with basic authentication.
+If `+/ws/my-ext/*+` is used, it does not collide with paths under `/ws`, neither does it take over `/ws` completely.
+At the same time it will be considered REST channel now thanks to `+/ws/my-ext/*+` pattern
+and basic authentication can be used.
+
+https://github.com/Evolveum/midpoint-custom-service[SOAP overlay example] uses different approach
+and goes around flexible authentication.
+
+== Recommendations wrap-up
+
+* Set up CXF servlet on a unique sub-path under `/ws/` (or `/api/` or `/rest/`).
+This way you will not disrupt existing built-in services and you'll still get REST channel authentication.
+
+* Alternatively, go for Spring MVC and just add another REST controller.
+Set up `@RequestMapping("/ws/<sub-path>")` under any of the paths supporting REST channel,
+but try not to collide with existing services by choosing distinct sub-path.
+This will probably be the future of this overlay example as well, for now it's in an experimental phase.
