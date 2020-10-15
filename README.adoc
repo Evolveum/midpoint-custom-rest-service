@@ -17,9 +17,10 @@ Term "REST" is used as usual in the industry but not in the strict REST meaning.
 Sorry about that.
 
 Example of a midPoint overlay project that implements a custom REST service.
-The current version is based on CXF and JAX-RS, not Spring MVC.
+The current version is based on CXF and JAX-RS.
+Early experimental Spring MVC version is described at the end of this document.
 
-The service is implemented by `ExampleRestService` class.
+The service is implemented by link:src/main/java/com/example/midpoint/service/ExampleRestService.java[ExampleRestService] class.
 Two necessary Spring context files are in `resources` directory.
 
 This project is an adaptation (with some simplifications) of https://github.com/Evolveum/midpoint-overlay-example[midpoint-custom-service].
@@ -36,6 +37,7 @@ Use JDK 11 for building and running this overlay.
 To build the example run `mvn clean package`.
 The final `midpoint.war` will be built in `target`.
 It can be run directly as executable JAR:
+
 ----
 java -jar target/midpoint.war
 ----
@@ -52,12 +54,14 @@ To return user(s) with e-mail address `jack@caribbean.com` try:
 
 * Pointing a browser to the URL: http://localhost:8080/midpoint/ws/my-ext/rest-example/users/mail/jack@caribbean.com
 and entering `administrator` name and password.
+
 * Running cURL command (by default returns XML):
 +
 ----
 curl -v --user "administrator:5ecr3t" \
   http://localhost:8080/midpoint/ws/my-ext/rest-example/users/mail/jack@caribbean.com
 ----
+
 * or HTTPie command (returns JSON because of `-j` flag):
 +
 ----
@@ -97,3 +101,36 @@ This way you will not disrupt existing built-in services and you'll still get RE
 Set up `@RequestMapping("/ws/<sub-path>")` under any of the paths supporting REST channel,
 but try not to collide with existing services by choosing distinct sub-path.
 This will probably be the future of this overlay example as well, for now it's in an experimental phase.
+
+== Experimental Spring MVC based REST controller
+
+With Spring MVC REST already configured for midPoint 4.2 it is easy to set up new REST controller and operations.
+However, due to freshness of this approach and minimal testing this part is considered *experimental and unsupported*.
+
+You can test Spring MVC based REST by:
+
+* Pointing a browser to the URL: http://localhost:8080/midpoint/ws/my-rest/users/mail/jack@caribbean.com
+and entering `administrator` name and password.
+
+* Running cURL command (by default returns XML):
++
+----
+curl -v --user "administrator:5ecr3t" \
+  http://localhost:8080/midpoint/ws/my-rest/users/mail/jack@caribbean.com
+----
+
+* or HTTPie command (returns JSON because of `-j` flag):
++
+----
+http -jv http://localhost:8080/midpoint/ws/my-rest/users/mail/jack@caribbean.com \
+  -a administrator:5ecr3t
+----
+
+Whole implementation is in link:src/main/java/com/example/midpoint/service/ExampleRestController.java[ExampleRestController].
+Class extends from https://github.com/Evolveum/midpoint/blob/master/model/rest-impl/src/main/java/com/evolveum/midpoint/rest/impl/AbstractRestController.java[AbstractRestController]
+from midPoint to utilize existing common methods.
+This is convenient but it may change in the future as it is not officially public API.
+
+If this way is used no additional CXF dependency and configuration is necessary.
+Map controllers under URL patterns using the REST channel, multiple mappings can be used,
+for examples check https://github.com/Evolveum/midpoint/blob/master/model/rest-impl/src/main/java/com/evolveum/midpoint/rest/impl/ModelRestController.java[ModelRestController.java].
