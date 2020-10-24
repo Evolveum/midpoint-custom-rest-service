@@ -23,18 +23,19 @@
 
     <groupId>com.example</groupId>
     <artifactId>midpoint-custom-rest-service</artifactId>
-    <version>4.2-SNAPSHOT</version>
+    <version>4.2</version>
     <packaging>war</packaging>
 
     <name>midPoint Custom REST Service Overlay</name>
     <description>Example of a midPoint overlay project that implements a custom REST service</description>
 
     <properties>
+        <midpoint.version>4.2</midpoint.version>
+
         <java.version>11</java.version>
         <project.source.version>${java.version}</project.source.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <midpoint.version>4.2-SNAPSHOT</midpoint.version>
         <spring.boot.version>2.3.3.RELEASE</spring.boot.version>
 
         <jaxb.version>2.3.0.1</jaxb.version>
