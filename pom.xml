@@ -23,14 +23,14 @@
 
     <groupId>com.example</groupId>
     <artifactId>midpoint-custom-rest-service</artifactId>
-    <version>4.2</version>
+    <version>4.3-SNAPSHOT</version>
     <packaging>war</packaging>
 
     <name>midPoint Custom REST Service Overlay</name>
     <description>Example of a midPoint overlay project that implements a custom REST service</description>
 
     <properties>
-        <midpoint.version>4.2</midpoint.version>
+        <midpoint.version>4.3-SNAPSHOT</midpoint.version>
 
         <java.version>11</java.version>
         <project.source.version>${java.version}</project.source.version>

@@ -73,8 +73,6 @@ http -jv http://localhost:8080/midpoint/ws/my-ext/rest-example/users/mail/jack@c
 == Technical notes
 
 [NOTE]
-Subject to change during 4.2 development.
-
 Previous to 4.2, CXF servlet was configured directly in midPoint `+/ws/*+` mapping.
 With 4.2 this is no longer true and `+/ws/*+` is used for REST service (just as `/rest` and `/api`).
 See https://wiki.evolveum.com/display/midPoint/REST+API[REST API] on our wiki for more.
