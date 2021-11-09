@@ -25,7 +25,7 @@ Two necessary Spring context files are in `resources` directory.
 
 This project is an adaptation (with some simplifications) of https://github.com/Evolveum/midpoint-overlay-example[midpoint-custom-service].
 Head of the master normally follows the current development version of midPoint.
-See https://github.com/Evolveum/midpoint-custom-rest-service/tree/v4.2[tag v4.2] for the last stable version.
+See https://github.com/Evolveum/midpoint-custom-rest-service/tree/v4.3[tag v4.3] for the last stable version.
 
 See also README from the https://github.com/Evolveum/midpoint-overlay-example[basic overlay example],
 including also https://github.com/Evolveum/midpoint-overlay-example/blob/master/doc/overlay-development.adoc[midPoint Overlay development] notes.
@@ -74,7 +74,7 @@ http -jv http://localhost:8080/midpoint/ws/my-ext/rest-example/users/mail/jack@c
 
 [NOTE]
 Previous to 4.2, CXF servlet was configured directly in midPoint `+/ws/*+` mapping.
-With 4.2 this is no longer true and `+/ws/*+` is used for REST service (just as `/rest` and `/api`).
+With 4.2 and later this is no longer true and `+/ws/*+` is used for REST service (just as `/rest` and `/api`).
 See https://wiki.evolveum.com/display/midPoint/REST+API[REST API] on our wiki for more.
 
 This overlay sets up CXF servlet on `+/ws/my-ext/*+`.
@@ -103,7 +103,7 @@ This will probably be the future of this overlay example as well, for now it's i
 
 == Experimental Spring MVC based REST controller
 
-With Spring MVC REST already configured for midPoint 4.2 it is easy to set up new REST controller and operations.
+With Spring MVC REST already configured for midPoint 4.2 (or later) it is easy to set up new REST controller and operations.
 However, due to freshness of this approach and minimal testing this part is considered *experimental and unsupported*.
 
 You can test Spring MVC based REST by:

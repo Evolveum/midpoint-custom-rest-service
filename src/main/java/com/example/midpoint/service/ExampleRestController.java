@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2020 Evolveum
+ * Copyright (C) 2010-2021 Evolveum
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,6 +42,7 @@ import com.evolveum.midpoint.xml.ns._public.common.common_3.UserType;
 @Experimental
 @RestController
 @RequestMapping("/ws/my-rest")
+@SuppressWarnings("unused")
 public class ExampleRestController extends AbstractRestController {
 
     @Autowired private ModelService modelService;

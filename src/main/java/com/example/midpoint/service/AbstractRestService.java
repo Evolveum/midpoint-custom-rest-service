@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2020 Evolveum
+ * Copyright (C) 2010-2021 Evolveum
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,7 +35,7 @@ import com.evolveum.midpoint.xml.ns._public.common.common_3.OperationResultType;
  * Common functionality that can be reused for concrete subclasses.
  * It also provides (non-static) logger named after concrete class.
  * <p>
- * This replaces RestServiceUtil from midPoint 4.1 that is gone in 4.2.
+ * This replaces RestServiceUtil from midPoint 4.1 that is gone in 4.2 and later.
  */
 public abstract class AbstractRestService {
 
@@ -118,6 +118,6 @@ public abstract class AbstractRestService {
         task.getResult().computeStatus();
         ConnectionEnvironment connEnv = ConnectionEnvironment.create(SchemaConstants.CHANNEL_REST_URI);
         connEnv.setSessionIdOverride(task.getTaskIdentifier());
-        securityHelper.auditLogout(connEnv, task);
+        securityHelper.auditLogout(connEnv, task, task.getResult());
     }
 }
