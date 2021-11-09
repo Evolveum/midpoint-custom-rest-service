@@ -23,23 +23,22 @@
 
     <groupId>com.example</groupId>
     <artifactId>midpoint-custom-rest-service</artifactId>
-    <version>4.3</version>
+    <version>4.4-SNAPSHOT</version>
     <packaging>war</packaging>
 
     <name>midPoint Custom REST Service Overlay</name>
     <description>Example of a midPoint overlay project that implements a custom REST service</description>
 
     <properties>
-        <midpoint.version>4.3</midpoint.version>
+        <midpoint.version>4.4-SNAPSHOT</midpoint.version>
 
         <java.version>11</java.version>
         <project.source.version>${java.version}</project.source.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <spring.boot.version>2.4.3</spring.boot.version>
+        <spring.boot.version>2.5.2</spring.boot.version>
 
-        <jaxb.version>2.3.0.1</jaxb.version>
-        <cxf.version>3.3.1</cxf.version>
+        <cxf.version>3.4.2</cxf.version>
     </properties>
 
     <dependencyManagement>
@@ -83,7 +82,8 @@
         </dependency>
 
         <!--
-        Necessary, otherwise some JARs are missing in lib-provided.
+        If missing when running from IDE, check for something like "include provided dependencies"
+        in the run configuration.
         -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -91,8 +91,19 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.apache.tomcat</groupId>
-            <artifactId>tomcat-annotations-api</artifactId>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-core</artifactId>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.tomcat</groupId>
+                    <artifactId>tomcat-annotations-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.annotation</groupId>
+            <artifactId>jakarta.annotation-api</artifactId>
             <scope>provided</scope>
         </dependency>
     </dependencies>
@@ -183,12 +194,6 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <version>3.2.2</version>
                 <configuration>
-                    <overlays>
-                        <overlay>
-                            <groupId>com.evolveum.midpoint.gui</groupId>
-                            <artifactId>admin-gui</artifactId>
-                        </overlay>
-                    </overlays>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
                     <packagingExcludes>
                         WEB-INF/lib/admin-gui-*-classes.jar,WEB-INF/lib/javax.annotation-api-*.jar
@@ -199,25 +204,35 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${spring.boot.version}</version>
-                <configuration>
-                    <fork>true</fork>
-                    <skip>false</skip>
-                </configuration>
                 <executions>
                     <execution>
                         <goals>
                             <goal>repackage</goal>
                         </goals>
                         <configuration>
+                            <layoutFactory implementation="com.evolveum.midpoint.tools.layout.MidPointWarLayoutFactory"/>
                             <excludes>
+                                <!-- GUI is not included as JAR but as classes, just like in original WAR. -->
                                 <exclude>
                                     <groupId>com.evolveum.midpoint.gui</groupId>
                                     <artifactId>admin-gui</artifactId>
+                                </exclude>
+                                <!-- Matches packagingExcludes above, replaced by tomcat-annotations-api. -->
+                                <exclude>
+                                    <groupId>javax.annotation</groupId>
+                                    <artifactId>javax.annotation-api</artifactId>
                                 </exclude>
                             </excludes>
                         </configuration>
                     </execution>
                 </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.evolveum.midpoint.tools</groupId>
+                        <artifactId>midpoint-boot-layout</artifactId>
+                        <version>${midpoint.version}</version>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
     </build>
