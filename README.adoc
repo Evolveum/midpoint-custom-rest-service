@@ -25,7 +25,7 @@ Two necessary Spring context files are in `resources` directory.
 
 This project is an adaptation (with some simplifications) of https://github.com/Evolveum/midpoint-overlay-example[midpoint-custom-service].
 Head of the master normally follows the current development version of midPoint.
-See https://github.com/Evolveum/midpoint-custom-rest-service/tree/v4.3[tag v4.3] for the last stable version.
+See https://github.com/Evolveum/midpoint-custom-rest-service/tree/v4.4[tag v4.4] for the last stable version.
 
 See also README from the https://github.com/Evolveum/midpoint-overlay-example[basic overlay example],
 including also https://github.com/Evolveum/midpoint-overlay-example/blob/master/doc/overlay-development.adoc[midPoint Overlay development] notes.
@@ -52,10 +52,6 @@ The REST service is set up under http://localhost:8080/midpoint/ws/my-ext/rest-e
 
 To return user(s) with e-mail address `jack@caribbean.com` try:
 
-// Currently not usable because of MID-6654
-//* Pointing a browser to the URL: http://localhost:8080/midpoint/ws/my-ext/rest-example/users/mail/jack@caribbean.com
-//and entering `administrator` name and password.
-
 * Running cURL command (by default returns XML):
 +
 ----
@@ -63,12 +59,16 @@ curl -v --user "administrator:5ecr3t" \
   http://localhost:8080/midpoint/ws/my-ext/rest-example/users/mail/jack@caribbean.com
 ----
 
-* or HTTPie command (returns JSON because of `-j` flag):
+* Running https://httpie.io/[HTTPie] command (returns JSON because of `-j` flag):
 +
 ----
 http -jv http://localhost:8080/midpoint/ws/my-ext/rest-example/users/mail/jack@caribbean.com \
   -a administrator:5ecr3t
 ----
+
+* Alternatively, point a browser to the URL: http://localhost:8080/midpoint/ws/my-ext/rest-example/users/mail/jack@caribbean.com
+and entering `administrator` name and password.
+This returns simplified string representation of the value as HTML.
 
 == Technical notes
 
@@ -108,10 +108,6 @@ However, due to freshness of this approach and minimal testing this part is cons
 
 You can test Spring MVC based REST by:
 
-// Currently not usable because of MID-6654
-//* Pointing a browser to the URL: http://localhost:8080/midpoint/ws/my-rest/users/mail/jack@caribbean.com
-//and entering `administrator` name and password.
-
 * Running cURL command (by default returns XML):
 +
 ----
@@ -119,12 +115,16 @@ curl -v --user "administrator:5ecr3t" \
   http://localhost:8080/midpoint/ws/my-rest/users/mail/jack@caribbean.com
 ----
 
-* or HTTPie command (returns JSON because of `-j` flag):
+* Running HTTPie command (returns JSON because of `-j` flag):
 +
 ----
 http -jv http://localhost:8080/midpoint/ws/my-rest/users/mail/jack@caribbean.com \
   -a administrator:5ecr3t
 ----
+
+* Alternatively, point a browser to the URL: http://localhost:8080/midpoint/ws/my-rest/users/mail/jack@caribbean.com
+and entering `administrator` name and password.
+This returns simplified string representation of the value as HTML.
 
 Whole implementation is in link:src/main/java/com/example/midpoint/service/ExampleRestController.java[ExampleRestController].
 Class extends from https://github.com/Evolveum/midpoint/blob/master/model/rest-impl/src/main/java/com/evolveum/midpoint/rest/impl/AbstractRestController.java[AbstractRestController]
