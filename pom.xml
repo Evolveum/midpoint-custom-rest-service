@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!--
-  ~ Copyright (C) 2014-2021 Evolveum
+  ~ Copyright (C) 2014-2022 Evolveum
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@
 
     <groupId>com.example</groupId>
     <artifactId>midpoint-custom-rest-service</artifactId>
-    <version>4.5-SNAPSHOT</version>
+    <version>4.5</version>
     <packaging>war</packaging>
 
     <name>midPoint Custom REST Service Overlay</name>
@@ -37,8 +37,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <spring.boot.version>2.5.2</spring.boot.version>
-
-        <cxf.version>3.4.2</cxf.version>
     </properties>
 
     <dependencyManagement>
