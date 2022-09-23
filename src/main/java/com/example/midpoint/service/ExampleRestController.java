@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2021 Evolveum
+ * Copyright (C) 2010-2022 Evolveum
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@ package com.example.midpoint.service;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,15 +37,24 @@ import com.evolveum.midpoint.util.exception.*;
 import com.evolveum.midpoint.xml.ns._public.common.api_types_3.ObjectListType;
 import com.evolveum.midpoint.xml.ns._public.common.common_3.UserType;
 
-// TODO note about danger of using AbstractRestController, which is not exactly stable public API
+/**
+ * This is a non-CXF variant based on Spring MVC.
+ * This is derived from midPoint public but non-API class {@link AbstractRestController}.
+ * It is generally usable (for a couple of MP versions already), but no support is provided.
+ */
 @Experimental
 @RestController
 @RequestMapping("/ws/my-rest")
 @SuppressWarnings("unused")
 public class ExampleRestController extends AbstractRestController {
 
-    @Autowired private ModelService modelService;
-    @Autowired private PrismContext prismContext;
+    private final ModelService modelService;
+    private final PrismContext prismContext;
+
+    public ExampleRestController(ModelService modelService, PrismContext prismContext) {
+        this.modelService = modelService;
+        this.prismContext = prismContext;
+    }
 
     @GetMapping("/users/mail/{email}")
     public ResponseEntity<?> searchUserByEmail(@PathVariable("email") String email) {

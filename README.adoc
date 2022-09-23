@@ -35,17 +35,13 @@ Check also https://wiki.evolveum.com/display/midPoint/Customization+With+Overlay
 
 Use JDK 11 for building and running this overlay.
 To build the example run `mvn clean package`.
-The final `midpoint.war` will be built in `target`.
+The final `midpoint.jar` will be built in `target`.
 It can be run directly as executable JAR:
 
 ----
-java -jar target/midpoint.war
+java -jar target/midpoint.jar
 ----
 
-Alternatively you may deploy the WAR to the Tomcat, but this option is no longer supported.
-The web service will be listening at: http://localhost:8080/midpoint/ws/my-ext/rest-example
-
-Deploy that WAR to the Tomcat.
 The REST service is set up under http://localhost:8080/midpoint/ws/my-ext/rest-example.
 
 == Testing
