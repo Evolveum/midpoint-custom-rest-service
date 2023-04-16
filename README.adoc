@@ -66,6 +66,10 @@ http -jv http://localhost:8080/midpoint/ws/my-ext/rest-example/users/mail/jack@c
 and entering `administrator` name and password.
 This returns simplified string representation of the value as HTML.
 
+If something doesn't work as expected, first check that you're not reusing existing midPoint home directory.
+If so, delete it, to ensure that the right initial objects are created.
+You can also set `-Dmidpoint.home=...` on the command line.
+
 == Technical notes
 
 [NOTE]
