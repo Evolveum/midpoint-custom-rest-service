@@ -15,8 +15,7 @@
  */
 package com.example.midpoint.service;
 
-import javax.ws.rs.core.Response;
-
+import jakarta.ws.rs.core.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.evolveum.midpoint.model.impl.security.SecurityHelper;
