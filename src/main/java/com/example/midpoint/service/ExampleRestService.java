@@ -45,7 +45,6 @@ public class ExampleRestService extends AbstractRestService {
     private static final Trace LOGGER = TraceManager.getTrace(ExampleRestService.class);
 
     @Autowired private ModelService modelService;
-    @Autowired private PrismContext prismContext;
 
     @GET
     @Path("/users/mail/{email}")
@@ -75,7 +74,7 @@ public class ExampleRestService extends AbstractRestService {
             throws SchemaException, ObjectNotFoundException, SecurityViolationException,
             CommunicationException, ConfigurationException, ExpressionEvaluationException {
 
-        ObjectQuery query = QueryBuilder.queryFor(UserType.class, prismContext)
+        ObjectQuery query = QueryBuilder.queryFor(UserType.class)
                 .item(UserType.F_EMAIL_ADDRESS).startsWith(email).matchingCaseIgnore()
                 .build();
         return modelService.searchObjects(UserType.class, query, null, task, result);

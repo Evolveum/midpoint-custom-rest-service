@@ -49,11 +49,9 @@ import com.evolveum.midpoint.xml.ns._public.common.common_3.UserType;
 public class ExampleRestController extends AbstractRestController {
 
     private final ModelService modelService;
-    private final PrismContext prismContext;
 
-    public ExampleRestController(ModelService modelService, PrismContext prismContext) {
+    public ExampleRestController(ModelService modelService) {
         this.modelService = modelService;
-        this.prismContext = prismContext;
     }
 
     @GetMapping("/users/mail/{email}")
@@ -82,7 +80,7 @@ public class ExampleRestController extends AbstractRestController {
             throws SchemaException, ObjectNotFoundException, SecurityViolationException,
             CommunicationException, ConfigurationException, ExpressionEvaluationException {
 
-        ObjectQuery query = QueryBuilder.queryFor(UserType.class, prismContext)
+        ObjectQuery query = QueryBuilder.queryFor(UserType.class)
                 .item(UserType.F_EMAIL_ADDRESS).startsWith(email).matchingCaseIgnore()
                 .build();
         return modelService.searchObjects(UserType.class, query, null, task, result);

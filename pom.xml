@@ -23,12 +23,12 @@
     <parent>
         <artifactId>midpoint</artifactId>
         <groupId>com.evolveum.midpoint</groupId>
-        <version>4.8</version>
+        <version>4.9-SNAPSHOT</version>
     </parent>
 
     <groupId>com.example</groupId>
     <artifactId>midpoint-custom-rest-service</artifactId>
-    <version>4.8</version>
+    <version>4.9-SNAPSHOT</version>
 
     <name>midPoint Custom REST Service Overlay</name>
     <description>Example of a midPoint overlay project that implements a custom REST service</description>
